@@ -1,6 +1,6 @@
 # Snowizard Discovery
 
-This is a [Dropwizard](http://dropwizard.codahale.com) [bundle](http://dropwizard.io/manual/core/#bundles) that can be used to register a Dropwizard service into [Zookeeper](https://zookeeper.apache.org) when upon startup. Connectivity to Zookeeper is provided by Netflix's [Curator](http://curator.incubator.apache.org) library and its built in [Service Discovery](http://curator.incubator.apache.org/curator-x-discovery/index.html) framework.
+This is a [Dropwizard](http://dropwizard.io) [bundle](http://dropwizard.io/manual/core/#bundles) that can be used to register a Dropwizard service into [Zookeeper](https://zookeeper.apache.org) when upon startup. Connectivity to Zookeeper is provided by Netflix's [Curator](http://curator.incubator.apache.org) library and its built in [Service Discovery](http://curator.incubator.apache.org/curator-x-discovery/index.html) framework.
 
 # Usage
 
@@ -59,7 +59,7 @@ Be sure to register the ```DiscoveryClient``` using the ```DiscoveryClientManage
 
 # Enhancements
 
-1. Support an "[Advertise Locally, Lookup Globally](http://whilefalse.blogspot.com/2012/12/building-global-highly-available.html)" model that Camille Fournier outlined on her blog by support separate Zookeeper connections, one that connects locally and one that connects to a global instance.
+1. Support an "[Advertise Locally, Lookup Globally](http://whilefalse.blogspot.com/2012/12/building-global-highly-available.html)" model that Camille Fournier outlined on her blog by supporting separate Zookeeper connections, one that connects locally and one that connects to a global instance.
 
 # Contributing
 
