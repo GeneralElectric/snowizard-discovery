@@ -1,6 +1,6 @@
 # Snowizard Discovery
 
-This is a [Dropwizard](http://dropwizard.io) [bundle](http://dropwizard.io/manual/core/#bundles) that can be used to register a Dropwizard service into [Zookeeper](https://zookeeper.apache.org) when upon startup. Connectivity to Zookeeper is provided by Netflix's [Curator](http://curator.incubator.apache.org) library and its built in [Service Discovery](http://curator.incubator.apache.org/curator-x-discovery/index.html) framework.
+This is a [Dropwizard](http://dropwizard.io) [bundle](http://dropwizard.io/manual/core/#bundles) that can be used to register a Dropwizard service into [Zookeeper](https://zookeeper.apache.org) upon startup. Connectivity to Zookeeper is provided by Netflix's [Curator](http://curator.incubator.apache.org) library and its built in [Service Discovery](http://curator.incubator.apache.org/curator-x-discovery/index.html) framework.
 
 # Usage
 
