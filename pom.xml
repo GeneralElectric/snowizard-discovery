@@ -10,7 +10,7 @@
 
     <groupId>com.ge.snowizard</groupId>
     <artifactId>snowizard-discovery</artifactId>
-    <version>0.6.2</version>
+    <version>0.7.0-SNAPSHOT</version>
 
     <name>Snowizard Discovery</name>
     <description>Service discovery for Snowizard using Curator</description>
@@ -36,7 +36,7 @@
         <connection>scm:git:git://github.com/GeneralElectric/snowizard-discovery.git</connection>
         <developerConnection>scm:git:git@github.com:GeneralElectric/snowizard-discovery.git</developerConnection>
         <url>http://github.com/GeneralElectric/snowizard-discovery</url>
-        <tag>v0.6.2</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <issueManagement>
