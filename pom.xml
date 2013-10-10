@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -11,7 +10,7 @@
 
     <groupId>com.ge.snowizard</groupId>
     <artifactId>snowizard-discovery</artifactId>
-    <version>0.6.2-SNAPSHOT</version>
+    <version>0.6.2</version>
 
     <name>Snowizard Discovery</name>
     <description>Service discovery for Snowizard using Curator</description>
@@ -37,7 +36,7 @@
         <connection>scm:git:git://github.com/GeneralElectric/snowizard-discovery.git</connection>
         <developerConnection>scm:git:git@github.com:GeneralElectric/snowizard-discovery.git</developerConnection>
         <url>http://github.com/GeneralElectric/snowizard-discovery</url>
-        <tag>HEAD</tag>
+        <tag>v0.6.2</tag>
     </scm>
 
     <issueManagement>
@@ -110,7 +109,7 @@
         <dependency>
             <groupId>com.yammer.dropwizard</groupId>
             <artifactId>dropwizard-core</artifactId>
-            <version>${project.version}</version>
+            <version>0.6.2</version>
         </dependency>
         <dependency>
             <groupId>org.apache.curator</groupId>
