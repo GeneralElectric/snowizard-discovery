@@ -30,7 +30,7 @@ bootstrap.addBundle(new DiscoveryBundle<HelloWorldConfiguration>());
 
 where ```HelloWorldConfiguration``` is your configuration class name.
 
-If you want to also consume other services, you can store and instance of the ```DiscoveryBundle``` so that you can retrieve a new ```DiscoveryClient``` to access additional services.
+If you want to also consume other services, you can store an instance of the ```DiscoveryBundle``` so that you can retrieve a new ```DiscoveryClient``` to access additional services.
 
 ```
 private DiscoveryBundle<HelloWorldConfiguration> discovery;
