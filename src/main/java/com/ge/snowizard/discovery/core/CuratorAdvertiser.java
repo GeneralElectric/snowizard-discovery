@@ -15,7 +15,7 @@ import org.apache.curator.x.discovery.ServiceInstance;
 import org.apache.curator.x.discovery.ServiceInstanceBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.ge.snowizard.discovery.DiscoveryConfiguration;
+import com.ge.snowizard.discovery.DiscoveryFactory;
 import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Iterables;
@@ -27,7 +27,7 @@ public class CuratorAdvertiser implements ConnectionStateListener {
 
     private static final UUID instanceId = UUID.randomUUID();
     private final ServiceDiscovery<InstanceMetadata> discovery;
-    private final DiscoveryConfiguration configuration;
+    private final DiscoveryFactory configuration;
 
     @GuardedBy("this")
     private String listenAddress;
@@ -39,11 +39,11 @@ public class CuratorAdvertiser implements ConnectionStateListener {
      * Constructor
      *
      * @param configuration
-     *            {@link DiscoveryConfiguration}
+     *            {@link DiscoveryFactory}
      * @param discovery
      *            {@link ServiceDiscovery}
      */
-    public CuratorAdvertiser(final DiscoveryConfiguration configuration,
+    public CuratorAdvertiser(final DiscoveryFactory configuration,
             final ServiceDiscovery<InstanceMetadata> discovery) {
         this.configuration = checkNotNull(configuration);
         this.discovery = checkNotNull(discovery);

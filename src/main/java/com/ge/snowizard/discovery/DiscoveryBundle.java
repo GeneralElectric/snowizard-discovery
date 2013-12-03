@@ -19,10 +19,11 @@ import com.ge.snowizard.discovery.manage.CuratorAdvertiserManager;
 import com.ge.snowizard.discovery.manage.ServiceDiscoveryManager;
 import com.yammer.dropwizard.ConfiguredBundle;
 import com.yammer.dropwizard.config.Bootstrap;
+import com.yammer.dropwizard.config.Configuration;
 import com.yammer.dropwizard.config.Environment;
 
-public class DiscoveryBundle<T extends DiscoveryConfiguration> implements
-        ConfiguredBundle<T> {
+public abstract class DiscoveryBundle<T extends Configuration> implements
+        ConfiguredBundle<T>, DiscoveryConfiguration<T> {
 
     private ServiceDiscovery<InstanceMetadata> discovery;
     private ObjectMapper mapper;
@@ -36,19 +37,20 @@ public class DiscoveryBundle<T extends DiscoveryConfiguration> implements
     public void run(final T configuration, final Environment environment)
             throws Exception {
 
+        final DiscoveryFactory discoveryConfig = getDiscoveryFactory(configuration);
         final CuratorFactory factory = new CuratorFactory(environment);
-        final CuratorFramework framework = factory.build(configuration);
+        final CuratorFramework framework = factory.build(discoveryConfig);
 
         final JacksonInstanceSerializer<InstanceMetadata> serializer = new JacksonInstanceSerializer<InstanceMetadata>(
                 mapper, new TypeReference<ServiceInstance<InstanceMetadata>>() {
                 });
 
         discovery = ServiceDiscoveryBuilder.builder(InstanceMetadata.class)
-                .basePath(configuration.getBasePath()).client(framework)
+                .basePath(discoveryConfig.getBasePath()).client(framework)
                 .serializer(serializer).build();
 
         final CuratorAdvertiser advertiser = new CuratorAdvertiser(
-                configuration, discovery);
+                discoveryConfig, discovery);
 
         // this listener is used to get the actual HTTP port this server is
         // listening on and uses that to register the service with ZK.
@@ -69,7 +71,7 @@ public class DiscoveryBundle<T extends DiscoveryConfiguration> implements
      * Return a new {@link DiscoveryClient} instance that uses a
      * {@link RoundRobinStrategy} when selecting a instance to return and the
      * default {@link DownInstancePolicy}.
-     *
+     * 
      * @param serviceName
      *            name of the service to monitor
      * @return {@link DiscoveryClient}
@@ -84,7 +86,7 @@ public class DiscoveryBundle<T extends DiscoveryConfiguration> implements
      * Return a new {@link DiscoveryClient} instance uses a default
      * {@link DownInstancePolicy} and the provided {@link ProviderStrategy} for
      * selecting an instance.
-     *
+     * 
      * @param serviceName
      *            name of the service to monitor
      * @param providerStrategy

@@ -2,7 +2,7 @@ package com.ge.snowizard.discovery.core;
 
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
-import com.ge.snowizard.discovery.DiscoveryConfiguration;
+import com.ge.snowizard.discovery.DiscoveryFactory;
 import com.ge.snowizard.discovery.health.CuratorHealthCheck;
 import com.ge.snowizard.discovery.manage.CuratorManager;
 import com.yammer.dropwizard.config.Environment;
@@ -26,10 +26,10 @@ public class CuratorFactory {
      * check and make sure it's properly managed.
      *
      * @param config
-     *            {@link DiscoveryConfiguration}
+     *            {@link DiscoveryFactory}
      * @return {@link CuratorFramework}
      */
-    public CuratorFramework build(final DiscoveryConfiguration config) {
+    public CuratorFramework build(final DiscoveryFactory config) {
         final CuratorFramework framework = CuratorFrameworkFactory
                 .builder()
                 .connectionTimeoutMs(
