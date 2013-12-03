@@ -16,16 +16,40 @@ To use the snowizard-discovery module, first add it as a dependency into your Ma
 </dependency>
 ```
 
-Then in your Dropwizard [Configuration](http://dropwizard.io/manual/core/#configuration) file, add a single property to identify the name of your service:
+Then in your Dropwizard [Configuration](http://dropwizard.io/manual/core/#configuration) file, add a property to represent the discovery configuration for your service:
 
 ```
-serviceName: hello-world
+# Discovery-related settings.
+discovery:
+    serviceName: hello-world
+```
+
+And have your configuration class expose the DiscoveryFactory.
+
+```
+public class HelloWorldConfiguration extends Configuration {
+
+    @Valid
+    @NotNull
+    @JsonProperty
+    private final DiscoveryFactory discovery = new DiscoveryFactory();
+
+    public DiscoveryFactory getDiscoveryFactory() {
+        return discovery;
+    }
+}
 ```
 
 If you only wish to have your service register itself with Zookeeper and you don't intend on consuming any other services, you just need to add the following into your service's ```initialize``` method:
 
 ```
-bootstrap.addBundle(new DiscoveryBundle<HelloWorldConfiguration>());
+final DiscoveryBundle<HelloWorldConfiguration> discovery = new DiscoveryBundle<HelloWorldConfiguration>() {
+    @Override
+    public DiscoveryFactory getDiscoveryFactory(HelloWorldConfiguration configuration) {
+        return configuration.getDiscoveryFactory();
+    }
+};
+bootstrap.addBundle(discovery);
 ```
 
 where ```HelloWorldConfiguration``` is your configuration class name.
@@ -42,7 +66,14 @@ public static void main(String[] args) throws Exception {
 @Override
 public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap) {
     bootstrap.setName("hello-world");
-    discovery = new DiscoveryBundle<HelloWorldConfiguration>();
+
+    discovery = new DiscoveryBundle<HelloWorldConfiguration>() {
+        @Override
+        public DiscoveryFactory getDiscoveryFactory(HelloWorldConfiguration configuration) {
+            return configuration.getDiscoveryFactory();
+        }
+    };
+
     bootstrap.addBundle(discovery);
 }
 
