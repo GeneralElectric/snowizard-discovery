@@ -1,8 +1,8 @@
 package com.ge.snowizard.discovery.manage;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import io.dropwizard.lifecycle.Managed;
 import org.apache.curator.x.discovery.ServiceDiscovery;
-import com.yammer.dropwizard.lifecycle.Managed;
 
 public class ServiceDiscoveryManager<T> implements Managed {
 
@@ -10,7 +10,7 @@ public class ServiceDiscoveryManager<T> implements Managed {
 
     /**
      * Constructor
-     *
+     * 
      * @param discovery
      *            {@link ServiceDiscovery}
      */

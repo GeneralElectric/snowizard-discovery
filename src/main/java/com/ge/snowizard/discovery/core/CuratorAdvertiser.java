@@ -37,7 +37,7 @@ public class CuratorAdvertiser implements ConnectionStateListener {
 
     /**
      * Constructor
-     *
+     * 
      * @param configuration
      *            {@link DiscoveryFactory}
      * @param discovery
@@ -51,7 +51,7 @@ public class CuratorAdvertiser implements ConnectionStateListener {
 
     /**
      * This must be called before other methods are used.
-     *
+     * 
      * @param port
      *            port this instance is listening on
      */
@@ -65,7 +65,7 @@ public class CuratorAdvertiser implements ConnectionStateListener {
                 LOGGER.debug("Found Local IP Addresses: {}, using {}", ips,
                         listenAddress);
             }
-        } catch (SocketException e) {
+        } catch (final SocketException e) {
             LOGGER.error("Error getting local IP addresses", e);
         }
 
@@ -88,7 +88,7 @@ public class CuratorAdvertiser implements ConnectionStateListener {
         try {
             discovery.registerService(getInstance());
             LOGGER.debug("Registered service in ZK");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw Throwables.propagate(e);
         }
     }
@@ -104,14 +104,14 @@ public class CuratorAdvertiser implements ConnectionStateListener {
         try {
             discovery.unregisterService(getInstance());
             LOGGER.debug("Unregistered service from ZK");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw Throwables.propagate(e);
         }
     }
 
     /**
      * Return the instance ID
-     *
+     * 
      * @return {@link UUID}
      */
     public UUID getInstanceId() {
@@ -121,7 +121,7 @@ public class CuratorAdvertiser implements ConnectionStateListener {
     /**
      * Return the {@link ServiceInstance} that will be registered with the
      * {@link ServiceDiscovery} instance.
-     *
+     * 
      * @return {@link ServiceInstance}
      * @throws Exception
      */
@@ -149,7 +149,8 @@ public class CuratorAdvertiser implements ConnectionStateListener {
      * TODO - figure out how to register this listener
      */
     @Override
-    public void stateChanged(CuratorFramework client, ConnectionState newState) {
+    public void stateChanged(final CuratorFramework client,
+            final ConnectionState newState) {
         if (newState == ConnectionState.RECONNECTED) {
             registerAvailability();
         }

@@ -1,11 +1,11 @@
 package com.ge.snowizard.discovery.core;
 
+import io.dropwizard.setup.Environment;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import com.ge.snowizard.discovery.DiscoveryFactory;
 import com.ge.snowizard.discovery.health.CuratorHealthCheck;
 import com.ge.snowizard.discovery.manage.CuratorManager;
-import com.yammer.dropwizard.config.Environment;
 
 public class CuratorFactory {
 
@@ -13,7 +13,7 @@ public class CuratorFactory {
 
     /**
      * Constructor
-     *
+     * 
      * @param environment
      *            {@link Environment}
      */
@@ -24,7 +24,7 @@ public class CuratorFactory {
     /**
      * Build a new instance of a {@link CuratorFramework} and register a health
      * check and make sure it's properly managed.
-     *
+     * 
      * @param config
      *            {@link DiscoveryFactory}
      * @return {@link CuratorFramework}
@@ -42,8 +42,9 @@ public class CuratorFactory {
                 .canBeReadOnly(config.isReadOnly())
                 .namespace(config.getNamespace()).build();
 
-        environment.manage(new CuratorManager(framework));
-        environment.addHealthCheck(new CuratorHealthCheck(framework));
+        environment.lifecycle().manage(new CuratorManager(framework));
+        environment.healthChecks().register("curator",
+                new CuratorHealthCheck(framework));
         return framework;
     }
 }

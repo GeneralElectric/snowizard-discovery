@@ -1,9 +1,9 @@
 package com.ge.snowizard.discovery.manage;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import io.dropwizard.lifecycle.Managed;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.utils.EnsurePath;
-import com.yammer.dropwizard.lifecycle.Managed;
 
 public class CuratorManager implements Managed {
 
@@ -11,7 +11,7 @@ public class CuratorManager implements Managed {
 
     /**
      * Constructor
-     *
+     * 
      * @param framework
      *            {@link CuratorFramework}
      */

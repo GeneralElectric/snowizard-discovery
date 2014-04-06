@@ -1,8 +1,8 @@
 package com.ge.snowizard.discovery.manage;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import io.dropwizard.lifecycle.Managed;
 import com.ge.snowizard.discovery.core.CuratorAdvertiser;
-import com.yammer.dropwizard.lifecycle.Managed;
 
 public class CuratorAdvertiserManager implements Managed {
 
@@ -10,7 +10,7 @@ public class CuratorAdvertiserManager implements Managed {
 
     /**
      * Constructor
-     *
+     * 
      * @param advertiser
      *            {@link CuratorAdvertiser}
      */

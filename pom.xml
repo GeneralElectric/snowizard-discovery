@@ -7,7 +7,7 @@
 
     <groupId>com.ge.snowizard</groupId>
     <artifactId>snowizard-discovery</artifactId>
-    <version>0.6.3-SNAPSHOT</version>
+    <version>0.7.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Snowizard Discovery</name>
@@ -22,7 +22,7 @@
     <developers>
         <developer>
             <name>Justin Plock</name>
-            <email>justin.plock@ge.com</email>
+            <email>justin@plock.net</email>
             <timezone>-5</timezone>
         </developer>
     </developers>
@@ -38,13 +38,13 @@
     <scm>
         <connection>scm:git:git://github.com/GeneralElectric/snowizard-discovery.git</connection>
         <developerConnection>scm:git:git@github.com:GeneralElectric/snowizard-discovery.git</developerConnection>
-        <url>http://github.com/GeneralElectric/snowizard-discovery</url>
+        <url>https://github.com/GeneralElectric/snowizard-discovery</url>
         <tag>HEAD</tag>
     </scm>
 
     <issueManagement>
         <system>github</system>
-        <url>http://github.com/GeneralElectric/snowizard-discovery/issues</url>
+        <url>https://github.com/GeneralElectric/snowizard-discovery/issues</url>
     </issueManagement>
 
     <repositories>
@@ -100,7 +100,7 @@
                         </executions>
                         <configuration>
                             <passphrase>${gpg.passphrase}</passphrase>
-                            <keyname>908336DC</keyname>
+                            <keyname>634EF5AC</keyname>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -110,14 +110,14 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.yammer.dropwizard</groupId>
+            <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-core</artifactId>
-            <version>0.6.2</version>
+            <version>0.7.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.curator</groupId>
             <artifactId>curator-framework</artifactId>
-            <version>2.2.0-incubating</version>
+            <version>2.4.1</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.google.guava</groupId>
@@ -140,7 +140,13 @@
         <dependency>
             <groupId>org.apache.curator</groupId>
             <artifactId>curator-x-discovery</artifactId>
-            <version>2.2.0-incubating</version>
+            <version>2.4.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
     
@@ -151,14 +157,14 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.16</version>
+                <version>2.17</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -210,7 +216,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>2.4.1</version>
+                <version>2.5</version>
                 <configuration>
                     <arguments>-Dgpg.passphrase=${gpg.passphrase}</arguments>
                     <autoVersionSubmodules>true</autoVersionSubmodules>

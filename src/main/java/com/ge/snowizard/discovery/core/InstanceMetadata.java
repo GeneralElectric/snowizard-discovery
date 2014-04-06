@@ -1,5 +1,6 @@
 package com.ge.snowizard.discovery.core;
 
+import io.dropwizard.validation.PortRange;
 import java.util.UUID;
 import javax.annotation.concurrent.Immutable;
 import javax.validation.constraints.NotNull;
@@ -7,7 +8,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Objects;
-import com.yammer.dropwizard.validation.PortRange;
 
 @Immutable
 public final class InstanceMetadata {
@@ -22,9 +22,9 @@ public final class InstanceMetadata {
     private final int listenPort;
 
     @JsonCreator
-    public InstanceMetadata(@JsonProperty("instanceId") UUID instanceId,
-            @JsonProperty("listenAddress") String listenAddress,
-            @JsonProperty("listenPort") int listenPort) {
+    public InstanceMetadata(@JsonProperty("instanceId") final UUID instanceId,
+            @JsonProperty("listenAddress") final String listenAddress,
+            @JsonProperty("listenPort") final int listenPort) {
         this.instanceId = instanceId;
         this.listenAddress = listenAddress;
         this.listenPort = listenPort;
