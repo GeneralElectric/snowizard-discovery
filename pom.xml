@@ -38,13 +38,13 @@
     <scm>
         <connection>scm:git:git://github.com/GeneralElectric/snowizard-discovery.git</connection>
         <developerConnection>scm:git:git@github.com:GeneralElectric/snowizard-discovery.git</developerConnection>
-        <url>http://github.com/GeneralElectric/snowizard-discovery</url>
+        <url>https://github.com/GeneralElectric/snowizard-discovery</url>
         <tag>HEAD</tag>
     </scm>
 
     <issueManagement>
         <system>github</system>
-        <url>http://github.com/GeneralElectric/snowizard-discovery/issues</url>
+        <url>https://github.com/GeneralElectric/snowizard-discovery/issues</url>
     </issueManagement>
 
     <repositories>
