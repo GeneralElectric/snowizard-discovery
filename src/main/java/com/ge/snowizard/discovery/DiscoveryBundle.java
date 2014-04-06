@@ -1,5 +1,9 @@
 package com.ge.snowizard.discovery;
 
+import io.dropwizard.Configuration;
+import io.dropwizard.ConfiguredBundle;
+import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.setup.Environment;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.x.discovery.DownInstancePolicy;
 import org.apache.curator.x.discovery.ProviderStrategy;
@@ -17,10 +21,6 @@ import com.ge.snowizard.discovery.core.InstanceMetadata;
 import com.ge.snowizard.discovery.core.JacksonInstanceSerializer;
 import com.ge.snowizard.discovery.manage.CuratorAdvertiserManager;
 import com.ge.snowizard.discovery.manage.ServiceDiscoveryManager;
-import com.yammer.dropwizard.ConfiguredBundle;
-import com.yammer.dropwizard.config.Bootstrap;
-import com.yammer.dropwizard.config.Configuration;
-import com.yammer.dropwizard.config.Environment;
 
 public abstract class DiscoveryBundle<T extends Configuration> implements
         ConfiguredBundle<T>, DiscoveryConfiguration<T> {
@@ -30,7 +30,7 @@ public abstract class DiscoveryBundle<T extends Configuration> implements
 
     @Override
     public void initialize(final Bootstrap<?> bootstrap) {
-        mapper = bootstrap.getObjectMapperFactory().build();
+        mapper = bootstrap.getObjectMapper();
     }
 
     @Override
@@ -54,17 +54,17 @@ public abstract class DiscoveryBundle<T extends Configuration> implements
 
         // this listener is used to get the actual HTTP port this server is
         // listening on and uses that to register the service with ZK.
-        environment
-                .addServerLifecycleListener(new CuratorAdvertisementListener(
-                        advertiser));
+        environment.lifecycle().addServerLifecycleListener(
+                new CuratorAdvertisementListener(advertiser));
 
         // this managed service is used to register the shutdown handler to
         // de-advertise the service from ZK on shutdown.
-        environment.manage(new CuratorAdvertiserManager(advertiser));
+        environment.lifecycle()
+                .manage(new CuratorAdvertiserManager(advertiser));
 
         // this managed service is used to start and stop the service discovery
-        environment.manage(new ServiceDiscoveryManager<InstanceMetadata>(
-                discovery));
+        environment.lifecycle().manage(
+                new ServiceDiscoveryManager<InstanceMetadata>(discovery));
     }
 
     /**

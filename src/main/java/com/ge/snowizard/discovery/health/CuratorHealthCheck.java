@@ -3,8 +3,7 @@ package com.ge.snowizard.discovery.health;
 import static com.google.common.base.Preconditions.checkNotNull;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.imps.CuratorFrameworkState;
-import com.yammer.metrics.core.HealthCheck;
-import com.yammer.metrics.core.HealthCheck.Result;
+import com.codahale.metrics.health.HealthCheck;
 
 public class CuratorHealthCheck extends HealthCheck {
 
@@ -12,19 +11,18 @@ public class CuratorHealthCheck extends HealthCheck {
 
     /**
      * Constructor
-     *
+     * 
      * @param framework
      *            {@link CuratorFramework}
      */
     public CuratorHealthCheck(final CuratorFramework framework) {
-        super("curator");
         this.framework = checkNotNull(framework);
     }
 
     /**
      * Checks that the {@link CuratorFramework} instance is started and that the
      * configured root namespace exists.
-     *
+     * 
      * @return {@link Result#unhealthy(String)} if the {@link CuratorFramework}
      *         is not started or the configured root namespace does not exist;
      *         otherwise, {@link Result#healthy()}.

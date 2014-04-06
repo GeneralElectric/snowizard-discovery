@@ -11,7 +11,7 @@ To use the snowizard-discovery module, first add it as a dependency into your Ma
     <dependency>
         <groupId>com.ge.snowizard</groupId>
         <artifactId>snowizard-discovery</artifactId>
-        <version>0.6.2</version>
+        <version>0.7.0</version>
     </dependency>
 </dependency>
 ```
@@ -31,11 +31,16 @@ public class HelloWorldConfiguration extends Configuration {
 
     @Valid
     @NotNull
-    @JsonProperty
-    private final DiscoveryFactory discovery = new DiscoveryFactory();
+    private DiscoveryFactory discovery = new DiscoveryFactory();
 
+    @JsonProperty("discovery")
     public DiscoveryFactory getDiscoveryFactory() {
         return discovery;
+    }
+
+    @JsonProperty("discovery")
+    public void setDiscoveryFactory(final DiscoveryFactory discoveryFactory) {
+        this.discovery = discoveryFactory;
     }
 }
 ```
@@ -43,13 +48,20 @@ public class HelloWorldConfiguration extends Configuration {
 If you only wish to have your service register itself with Zookeeper and you don't intend on consuming any other services, you just need to add the following into your service's ```initialize``` method:
 
 ```
-final DiscoveryBundle<HelloWorldConfiguration> discovery = new DiscoveryBundle<HelloWorldConfiguration>() {
+public class HelloWorldApplication extends Application<HelloWorldConfiguration> {
+
+    private final DiscoveryBundle<HelloWorldConfiguration> discoveryBundle = new DiscoveryBundle<HelloWorldConfiguration>() {
+        @Override
+        public DiscoveryFactory getDiscoveryFactory(final HelloWorldConfiguration configuration) {
+            return configuration.getDiscoveryFactory();
+        }
+    };
+
     @Override
-    public DiscoveryFactory getDiscoveryFactory(HelloWorldConfiguration configuration) {
-        return configuration.getDiscoveryFactory();
+    public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap) {
+        bootstrap.addBundle(discoveryBundle);
     }
-};
-bootstrap.addBundle(discovery);
+}
 ```
 
 where ```HelloWorldConfiguration``` is your configuration class name.
@@ -57,32 +69,25 @@ where ```HelloWorldConfiguration``` is your configuration class name.
 If you want to also consume other services, you can store an instance of the ```DiscoveryBundle``` so that you can retrieve a new ```DiscoveryClient``` to access additional services.
 
 ```
-private DiscoveryBundle<HelloWorldConfiguration> discovery;
+public class HelloWorldApplication extends Application<HelloWorldConfiguration> {
 
-public static void main(String[] args) throws Exception {
-    new HelloWorldService().run(args);
-}
-
-@Override
-public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap) {
-    bootstrap.setName("hello-world");
-
-    discovery = new DiscoveryBundle<HelloWorldConfiguration>() {
+    private final DiscoveryBundle<HelloWorldConfiguration> discoveryBundle = new DiscoveryBundle<HelloWorldConfiguration>() {
         @Override
-        public DiscoveryFactory getDiscoveryFactory(HelloWorldConfiguration configuration) {
+        public DiscoveryFactory getDiscoveryFactory(final HelloWorldConfiguration configuration) {
             return configuration.getDiscoveryFactory();
         }
     };
 
-    bootstrap.addBundle(discovery);
-}
+    @Override
+    public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap) {
+        bootstrap.addBundle(discoveryBundle);
+    }
 
-@Override
-public void run(HelloWorldConfiguration configuration,
-        Environment environment) throws Exception {
-
-    final DiscoveryClient client = discovery.newDiscoveryClient("hello-world");
-    environment.manage(new DiscoveryClientManager(client));
+    @Override
+    public void run(HelloWorldConfiguration configuration, Environment environment) throws Exception {
+        final DiscoveryClient client = discoveryBundle.newDiscoveryClient("hello-world");
+        environment.lifecycle().manage(new DiscoveryClientManager(client));
+    }
 }
 ```
 

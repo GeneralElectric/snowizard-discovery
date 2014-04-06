@@ -1,5 +1,7 @@
 package com.ge.snowizard.discovery;
 
+import io.dropwizard.util.Duration;
+import io.dropwizard.validation.PortRange;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -11,8 +13,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Joiner;
-import com.yammer.dropwizard.util.Duration;
-import com.yammer.dropwizard.validation.PortRange;
 
 public class DiscoveryFactory {
 

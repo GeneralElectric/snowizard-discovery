@@ -1,7 +1,7 @@
 package com.ge.snowizard.discovery.client;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import com.yammer.dropwizard.lifecycle.Managed;
+import io.dropwizard.lifecycle.Managed;
 
 public class DiscoveryClientManager implements Managed {
 
@@ -9,7 +9,7 @@ public class DiscoveryClientManager implements Managed {
 
     /**
      * Constructor
-     *
+     * 
      * @param discovery
      *            {@link DiscoveryClient}
      */
