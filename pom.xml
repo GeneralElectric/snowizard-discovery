@@ -7,7 +7,7 @@
 
     <groupId>com.ge.snowizard</groupId>
     <artifactId>snowizard-discovery</artifactId>
-    <version>0.7.0-SNAPSHOT</version>
+    <version>0.7.0</version>
     <packaging>jar</packaging>
 
     <name>Snowizard Discovery</name>
@@ -39,7 +39,7 @@
         <connection>scm:git:git://github.com/GeneralElectric/snowizard-discovery.git</connection>
         <developerConnection>scm:git:git@github.com:GeneralElectric/snowizard-discovery.git</developerConnection>
         <url>https://github.com/GeneralElectric/snowizard-discovery</url>
-        <tag>HEAD</tag>
+        <tag>v0.7.0</tag>
     </scm>
 
     <issueManagement>
