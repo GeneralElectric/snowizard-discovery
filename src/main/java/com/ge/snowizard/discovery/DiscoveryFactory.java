@@ -177,7 +177,7 @@ public class DiscoveryFactory {
      * 
      * @return the compression provider used to compress values.
      * 
-     * @see CompressionCodec
+     * @see #CompressionCodec
      */
     @JsonIgnore
     public CompressionProvider getCompressionProvider() {

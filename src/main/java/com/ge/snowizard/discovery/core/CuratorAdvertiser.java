@@ -138,6 +138,8 @@ public class CuratorAdvertiser implements ConnectionStateListener {
     /**
      * Check that the {@link #initListenInfo} method has been called by
      * validating that the listenPort is greater than 1.
+     * 
+     * @throws IllegalStateException
      */
     private void checkInitialized() {
         if (Strings.isNullOrEmpty(listenAddress) || listenPort < 1) {
