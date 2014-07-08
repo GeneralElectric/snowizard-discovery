@@ -2,6 +2,8 @@ package com.ge.snowizard.discovery.client;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkArgument;
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.Collection;
 import javax.annotation.concurrent.ThreadSafe;
 import org.apache.curator.x.discovery.DownInstancePolicy;
@@ -10,17 +12,22 @@ import org.apache.curator.x.discovery.ServiceCache;
 import org.apache.curator.x.discovery.ServiceDiscovery;
 import org.apache.curator.x.discovery.ServiceInstance;
 import org.apache.curator.x.discovery.ServiceProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.ge.snowizard.discovery.core.InstanceMetadata;
 
 @ThreadSafe
-public class DiscoveryClient {
+public class DiscoveryClient implements Closeable {
 
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(DiscoveryClient.class);
     private final ServiceDiscovery<InstanceMetadata> discovery;
     private final ServiceProvider<InstanceMetadata> provider;
+    private final ServiceCache<InstanceMetadata> cache;
 
     /**
      * Constructor
-     *
+     * 
      * @param serviceName
      *            name of the service to monitor
      * @param discovery
@@ -45,11 +52,13 @@ public class DiscoveryClient {
                 .serviceName(serviceName)
                 .downInstancePolicy(downInstancePolicy)
                 .providerStrategy(providerStrategy).build();
+
+        this.cache = discovery.serviceCacheBuilder().name(serviceName).build();
     }
 
     /**
      * Return a list of discoverable services
-     *
+     * 
      * @return Collection of service names
      */
     public Collection<String> getServices() throws Exception {
@@ -58,7 +67,7 @@ public class DiscoveryClient {
 
     /**
      * Return the running instances for the service.
-     *
+     * 
      * @return Collection of service instances
      */
     public Collection<ServiceInstance<InstanceMetadata>> getInstances(
@@ -67,8 +76,17 @@ public class DiscoveryClient {
     }
 
     /**
+     * Return a cached list of the running instances for the service.
+     * 
+     * @return Collection of service instances
+     */
+    public Collection<ServiceInstance<InstanceMetadata>> getInstances() {
+        return cache.getInstances();
+    }
+
+    /**
      * Return an instance of this service.
-     *
+     * 
      * @return ServiceInstance
      * @throws Exception
      */
@@ -78,7 +96,7 @@ public class DiscoveryClient {
 
     /**
      * Note an error when connecting to a service instance.
-     *
+     * 
      * @param instance
      *            {@link ServiceInstance} that is causing the error.
      */
@@ -88,19 +106,24 @@ public class DiscoveryClient {
 
     /**
      * Start the internal {@link ServiceProvider} and {@link ServiceCache}
-     *
+     * 
      * @throws Exception
      */
     public void start() throws Exception {
         provider.start();
+        cache.start();
     }
 
     /**
      * Stop the internal {@link ServiceProvider} and {@link ServiceCache}
-     *
-     * @throws Exception
      */
-    public void close() throws Exception {
-        provider.close();
+    @Override
+    public void close() {
+        try {
+            cache.close();
+            provider.close();
+        } catch (final IOException e) {
+            LOGGER.error("Unable to close provider", e);
+        }
     }
 }
