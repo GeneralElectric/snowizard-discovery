@@ -61,7 +61,7 @@ public class DiscoveryFactory {
     private String listenAddress = "127.0.0.1";
 
     @NotEmpty
-    private String namespace = "ge";
+    private String namespace = "snowizard";
 
     @NotEmpty
     private String basePath = "service";
