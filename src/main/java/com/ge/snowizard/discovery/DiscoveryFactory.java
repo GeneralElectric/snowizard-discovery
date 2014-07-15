@@ -115,6 +115,11 @@ public class DiscoveryFactory {
     }
 
     @JsonProperty
+    public void setServiceName(final String serviceName) {
+        this.serviceName = serviceName;
+    }
+
+    @JsonProperty
     public String getNamespace() {
         return namespace;
     }

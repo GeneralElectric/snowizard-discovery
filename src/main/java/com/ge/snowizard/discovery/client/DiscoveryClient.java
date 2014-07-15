@@ -121,6 +121,10 @@ public class DiscoveryClient implements Closeable {
     public void close() {
         try {
             cache.close();
+        } catch (final IOException e) {
+            LOGGER.error("Unable to close cache", e);
+        }
+        try {
             provider.close();
         } catch (final IOException e) {
             LOGGER.error("Unable to close provider", e);
