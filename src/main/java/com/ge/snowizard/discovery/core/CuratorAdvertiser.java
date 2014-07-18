@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.ge.snowizard.discovery.DiscoveryFactory;
 import com.google.common.base.Strings;
-import com.google.common.base.Throwables;
 import com.google.common.collect.Iterables;
 
 @ThreadSafe
@@ -34,6 +33,9 @@ public class CuratorAdvertiser implements ConnectionStateListener {
 
     @GuardedBy("this")
     private int listenPort = 0;
+
+    @GuardedBy("this")
+    private ServiceInstance<InstanceMetadata> instance;
 
     /**
      * Constructor
@@ -54,6 +56,7 @@ public class CuratorAdvertiser implements ConnectionStateListener {
      * 
      * @param port
      *            port this instance is listening on
+     * @throws Exception
      */
     public synchronized void initListenInfo(final int port) {
         try {
@@ -79,34 +82,56 @@ public class CuratorAdvertiser implements ConnectionStateListener {
 
     /**
      * Register the instance in Zookeeper
+     * 
+     * @throws Exception
      */
-    public synchronized void registerAvailability() {
-        checkInitialized();
-        LOGGER.info("Registering availability at <{}:{}>", listenAddress,
-                listenPort);
+    public synchronized void registerAvailability() throws Exception {
+        registerAvailability(getInstance());
+    }
 
-        try {
-            discovery.registerService(getInstance());
-            LOGGER.debug("Registered service in ZK");
-        } catch (final Exception e) {
-            throw Throwables.propagate(e);
-        }
+    /**
+     * Register a specific instance in Zookeeper
+     * 
+     * @param instance
+     *            Service Instance
+     * @throws Exception
+     */
+    public synchronized void registerAvailability(
+            final ServiceInstance<InstanceMetadata> instance) throws Exception {
+        checkInitialized();
+        LOGGER.info("Registering service ({}) at <{}:{}>",
+                configuration.getServiceName(), listenAddress, listenPort);
+
+        discovery.registerService(instance);
+        LOGGER.debug("Successfully registered service ({}) in ZK",
+                configuration.getServiceName());
     }
 
     /**
      * Remove the instance from Zookeeper
+     * 
+     * @throws Exception
      */
-    public synchronized void unregisterAvailability() {
-        checkInitialized();
-        LOGGER.info("Unregistering availability at <{}:{}>", listenAddress,
-                listenPort);
+    public synchronized void unregisterAvailability() throws Exception {
+        unregisterAvailability(getInstance());
+    }
 
-        try {
-            discovery.unregisterService(getInstance());
-            LOGGER.debug("Unregistered service from ZK");
-        } catch (final Exception e) {
-            throw Throwables.propagate(e);
-        }
+    /**
+     * Remove the specific instance from Zookeeper
+     * 
+     * @param instance
+     *            Service Instance
+     * @throws Exception
+     */
+    public synchronized void unregisterAvailability(
+            final ServiceInstance<InstanceMetadata> instance) throws Exception {
+        checkInitialized();
+        LOGGER.info("Unregistering service ({}) at <{}:{}>",
+                configuration.getServiceName(), listenAddress, listenPort);
+
+        discovery.unregisterService(instance);
+        LOGGER.debug("Successfully unregistered service ({}) from ZK",
+                configuration.getServiceName());
     }
 
     /**
@@ -119,27 +144,53 @@ public class CuratorAdvertiser implements ConnectionStateListener {
     }
 
     /**
+     * Return the listening port
+     * 
+     * @return port number
+     */
+    public int getListenPort() {
+        return listenPort;
+    }
+
+    /**
+     * Return the listening IP address
+     * 
+     * @return IP address
+     */
+    public String getListenAddress() {
+        return listenAddress;
+    }
+
+    /**
      * Return the {@link ServiceInstance} that will be registered with the
      * {@link ServiceDiscovery} instance.
      * 
      * @return {@link ServiceInstance}
      * @throws Exception
      */
-    public ServiceInstance<InstanceMetadata> getInstance() throws Exception {
+    public synchronized ServiceInstance<InstanceMetadata> getInstance()
+            throws Exception {
+        if (instance != null) {
+            return instance;
+        }
+
         final InstanceMetadata metadata = new InstanceMetadata(instanceId,
                 listenAddress, listenPort);
 
-        return ServiceInstance.<InstanceMetadata> builder()
+        instance = ServiceInstance.<InstanceMetadata> builder()
                 .name(configuration.getServiceName()).address(listenAddress)
                 .port(listenPort).id(instanceId.toString()).payload(metadata)
                 .build();
+        return instance;
     }
 
     /**
      * Check that the {@link #initListenInfo} method has been called by
      * validating that the listenPort is greater than 1.
+     * 
+     * @throws IllegalStateException
      */
-    private void checkInitialized() {
+    public void checkInitialized() {
         if (Strings.isNullOrEmpty(listenAddress) || listenPort < 1) {
             throw new IllegalStateException("Not initialized");
         }
@@ -152,7 +203,11 @@ public class CuratorAdvertiser implements ConnectionStateListener {
     public void stateChanged(final CuratorFramework client,
             final ConnectionState newState) {
         if (newState == ConnectionState.RECONNECTED) {
-            registerAvailability();
+            try {
+                registerAvailability();
+            } catch (final Exception e) {
+                LOGGER.error("Unable to register service", e);
+            }
         }
     }
 }

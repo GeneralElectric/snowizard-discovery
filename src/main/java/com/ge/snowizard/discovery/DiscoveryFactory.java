@@ -61,7 +61,7 @@ public class DiscoveryFactory {
     private String listenAddress = "127.0.0.1";
 
     @NotEmpty
-    private String namespace = "ge";
+    private String namespace = "snowizard";
 
     @NotEmpty
     private String basePath = "service";
@@ -112,6 +112,11 @@ public class DiscoveryFactory {
     @JsonProperty
     public String getServiceName() {
         return serviceName;
+    }
+
+    @JsonProperty
+    public void setServiceName(final String serviceName) {
+        this.serviceName = serviceName;
     }
 
     @JsonProperty
@@ -177,7 +182,7 @@ public class DiscoveryFactory {
      * 
      * @return the compression provider used to compress values.
      * 
-     * @see CompressionCodec
+     * @see #CompressionCodec
      */
     @JsonIgnore
     public CompressionProvider getCompressionProvider() {

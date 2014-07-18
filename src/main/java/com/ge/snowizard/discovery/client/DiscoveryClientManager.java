@@ -10,7 +10,7 @@ public class DiscoveryClientManager implements Managed {
     /**
      * Constructor
      * 
-     * @param discovery
+     * @param client
      *            {@link DiscoveryClient}
      */
     public DiscoveryClientManager(final DiscoveryClient client) {
