@@ -16,7 +16,7 @@ To use the snowizard-discovery module, first add it as a dependency into your Ma
 </dependency>
 ```
 
-Then in your Dropwizard [Configuration](http://dropwizard.io/manual/core/#configuration) file, add a property to represent the discovery configuration for your service:
+Then in your Dropwizard [Configuration](http://dropwizard.io/manual/core.html#configuration) file, add a property to represent the discovery configuration for your service:
 
 ```
 # Discovery-related settings.
@@ -91,7 +91,7 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
 }
 ```
 
-Be sure to register the ```DiscoveryClient``` using the ```DiscoveryClientManager``` as a [Managed Object](http://dropwizard.io/manual/core/#managed-objects) so that it is properly started and shutdown when your service is stopped and started.
+Be sure to register the ```DiscoveryClient``` using the ```DiscoveryClientManager``` as a [Managed Object](http://dropwizard.io/manual/core.html#managed-objects) so that it is properly started and shutdown when your service is stopped and started.
 
 # Enhancements
 
